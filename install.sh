@@ -57,10 +57,12 @@ git clone https://github.com/pop-os/shell.git \
 
 # VMware
 wget https://www.vmware.com/go/getplayer-linux --user-agent="Mozilla" -O vmware.bundle \
-    && chmod +x vmware.bundle
+    && chmod +x vmware.bundle \
+    && ./vmware.bundle
 
-# Snap programs
-snap install dbgate
+# DBGate
+wget https://github.com/dbgate/dbgate/releases/latest/download/dbgate-latest.deb \
+    && dpkg -i dbgate-latest.deb 
 
 # Cleanup
 rm *.deb *.flatpakref *.bundle
