@@ -1,7 +1,7 @@
 #!/bin/bash
 
-apt update
-apt install apt-transport-https \
+# Basics needed
+apt update && apt install apt-transport-https \
     ca-certificates \
     curl \
     gnupg \
@@ -17,7 +17,8 @@ wget 'https://discord.com/api/download?platform=linux&format=deb' -O discord.deb
 # VSCode
 wget 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64' -O vscode.deb \
    && dpkg -i vscode.deb
-   
+
+# Deb missing dependancies 
 apt --fix-broken install
 
 # Brave keyring
@@ -31,30 +32,37 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-
-apt update
-
-apt install -y \
+# Software from repos
+apt update && apt install -y \
     flatpak gnome-software-plugin-flatpak \
     brave-browser \
     docker-ce docker-ce-cli containerd.io docker-compose-plugin \
     openfortivpn \
     diodon
-    
+
+# Disable Docker on startup
 systemctl disable docker
 systemctl stop docker
  
-
+# Flatpak
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo \
     && flatpak install flathub com.mattjakeman.ExtensionManager
 
-rm *.deb *.flatpakref
-
+# PopOS Shell
 git clone https://github.com/pop-os/shell.git \
     && cd shell \
     && make local-install \
     && cd ..
     && rm -r shell
 
+# VMware
+wget https://www.vmware.com/go/getplayer-linux --user-agent="Mozilla" -O vmware.bundle \
+    && chmod +x vmware.bundle
+
+# Snap programs
+snap install dbgate
+
+# Cleanup
+rm *.deb *.flatpakref *.bundle
 
 echo "Install these gnome extensions from the extension manager: 'hide top bar', 'vitals'"
